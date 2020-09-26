@@ -37,30 +37,25 @@ namespace DataConnector
                 throw new Exception("Invalid DataFolder");
             }
 
-            /*    
-            var croisement = "NA5_B-ENTR_INDIVIDUELLE";
-            var jeu_donnees = "GEO2017REE2017";
-            var nivgeo = "COM";
-            var codgeo = "51108";
-            var modalite = "all.all";
+            var inseeParameters = new InseeParametersRequest(ConfigurationManager.AppSettings.Get("JeuDonnees"),
+                 ConfigurationManager.AppSettings.Get("Croisement"), ConfigurationManager.AppSettings.Get("Modalite"), ConfigurationManager.AppSettings.Get("Nivgeo"), "");
 
-            var croisement = "SEXE-AGEACT6_B-TACTR_2";
-            var jeu_donnees = "GEO2019RP2016";
-            var nivgeo = "COM";
-            var codgeo = "44109";
-            var modalite = "all.all.all";
-             */
+            var nbCommunes = ConfigurationManager.AppSettings.Get("NbCommunes");
 
-            var croisement = "ILTR2-CS1_6-SEXE";
-            var jeu_donnees = "GEO2019RP2016";
-            var nivgeo = "COM";
-            var modalite = "all.all.all";
-            var inseeParameters = new InseeParametersRequest(jeu_donnees, croisement, modalite, nivgeo, "");
+            List<InseeCommune> listCommunes;
+            if (nbCommunes == "*")
+            {
+                listCommunes = InseeUtils.GetListOfCommunes(dataFolder);
+            }
+            else
+            {
+                var nb = Convert.ToInt32(nbCommunes);
+                listCommunes = InseeUtils.GetListOfCommunes(dataFolder).Take(nb).ToList();
+            }
 
-            var watch = new Stopwatch();
-            var listCommunes = InseeUtils.GetListOfCommunes(dataFolder).Take(10).ToList();
-            
             //rate limit 30 requests per minute
+            var watch = new Stopwatch();
+
             var nbSecondToWait = 2;
 
             var listData = new List<InseeData>();

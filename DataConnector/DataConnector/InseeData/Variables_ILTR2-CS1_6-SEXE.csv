@@ -1,0 +1,21 @@
+﻿Variables utilisées
+
+ILTR2 : Lieu de travail
+ENS : Ensemble
+1 : Dans la commune de résidence actuelle
+2 : Dans une autre commune que la commune de résidence actuelle
+
+SEXE : Sexe
+ENS : Ensemble
+1 : Hommes
+2 : Femmes
+
+CS1_6 : Catégorie socioprofessionnelle regroupée (6 postes)
+ENS : Ensemble
+1 : Agriculteurs exploitants
+2 : Artisans, commerçants, chefs entreprise
+3 : Cadres et professions intellectuelles supérieures
+4 : Professions intermédiaires
+5 : Employés
+6 : Ouvriers
+

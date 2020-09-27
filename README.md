@@ -1,9 +1,9 @@
 # DataConnector
 
-Le programme est un connecteur pour récupérer les données de l'Insee en se connectant à leur Api et les écrire
+Le programme récupére les données de l'Insee en se connectant à leur Api et les écrit
 dans deux fichiers csv (un fichier pour les variables et un fichier pour la rawdata).
 
-Pour récupérer la donnée il faut suivre la procédure suivante :
+Pour lancer le programme il faut suivre la procédure suivante :
 1) Ouvrir le fichier excel doc_RP.xls
 2) Choisissez dans la feuille lib_tableau, le tableau qui vous intéresse en vous aidant du libellé associé à chaque tableau
 3) Munissez-vous du nom du tableau et allez dans la feuille mesure_croisement

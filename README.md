@@ -3,6 +3,8 @@
 Le programme récupère les données de l'Insee en se connectant à leur Api et les écrit
 dans deux fichiers csv (un fichier pour les variables et un fichier pour la rawdata).
 
+Le programme se trouve dans le dossier Release.zip;
+
 Pour lancer le programme il faut suivre la procédure suivante :
 1) Ouvrir le fichier excel doc_RP.xls
 2) Choisissez dans la feuille lib_tableau, le tableau qui vous intéresse en vous aidant du libellé associé à chaque tableau
@@ -18,7 +20,7 @@ Pour lancer le programme il faut suivre la procédure suivante :
 Remarque1 : La rate limit pour l'Api de l'Insee est de 30 requêtes par minute. Un rateLimiter est implémenté dans le programme. 
 Comme on ne peut demander qu'une seule commune par requête, le temps nécessaire pour récupérer les 36 000 communes de la France est d'environ 19 heures....
 
-Remarque3 : Le programme dispose d'un mode smartcontinue. Si le programme plante pendant son exécution, lorsqu'on le redémarre, il reprend là où il s'est arrêté.
+Remarque2 : Le programme dispose d'un mode smartcontinue. Si le programme plante pendant son exécution, lorsqu'on le redémarre, il reprend là où il s'est arrêté.
 
-Remarque2 : Deux exemples de résultats se trouvent dans le dossier InseeData : RawData_ILTR2-CS1_6-SEXE.csv et Variables_ILTR2-CS1_6-SEXE.csv qui correspondent au tableau
+Remarque3 : Deux exemples de résultats se trouvent dans le dossier InseeData : RawData_ILTR2-CS1_6-SEXE.csv et Variables_ILTR2-CS1_6-SEXE.csv qui correspondent au tableau
 "NAV3 V1" qui a pour libellé "Population active de 15 ans ou plus ayant un emploi par sexe, lieu de travail et catégorie socioprofessionnelle" 

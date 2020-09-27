@@ -14,7 +14,7 @@ Pour lancer le programme il faut suivre la procédure suivante :
 6) Allez sur le site de l'Api de l'Insee pour créer un compte https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=DonneesLocales&version=V0.1&provider=insee
 7) Récupérez votre access token sur votre compte Insee
 8) Il faut ensuite unzip le dossier Release.zip
-9) Dans le dossier Release, il y a un fichier de configuration App.config, vous pouvez remplacer les champs Croisement, JeuDonnees, Modalite, AccessToken avec vos valeurs dans ce fichier
+9) Dans le dossier Release, il y a un fichier de configuration DataConnector.dll.config, vous pouvez remplacer les champs Croisement, JeuDonnees, Modalite, AccessToken avec vos valeurs dans ce fichier
 10) Lancez l'exécutable DataConnector en mode administrateur.
 11) Les fichiers csv se trouveront dans le dossier InseeData
 

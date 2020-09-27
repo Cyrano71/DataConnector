@@ -1,9 +1,9 @@
 # DataConnector
 
-Le programme récupère les données de l'Insee en se connectant à leur Api et les écrit
+Le programme DataConnector récupère les données de l'Insee en se connectant à leur Api et les écrit
 dans deux fichiers csv (un fichier pour les variables et un fichier pour la rawdata).
 
-Le programme se trouve dans le dossier Release.zip;
+L'exécutable DataConnector.exe se trouve dans le dossier Release.zip;
 
 Pour lancer le programme il faut suivre la procédure suivante :
 1) Ouvrir le fichier excel doc_RP.xls

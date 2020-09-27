@@ -16,7 +16,7 @@ Pour lancer le programme il faut suivre la procédure suivante :
 10) Lancez l'exécutable DataConnector en mode administrateur.
 
 Remarque1 : La rate limit pour l'Api de l'Insee est de 30 requêtes par minute. Un rateLimiter est implémenté dans le programme. 
-Comme on ne peut demander qu'une seule commune par requête le temps nécessaire pour récupérer les 36 000 communes de la France est aux alentours de 19 heures....
+Comme on ne peut demander qu'une seule commune par requête le temps nécessaire pour récupérer les 36 000 communes de la France est d'environ 19 heures....
 
 Remarque3 : Le programme dispose d'un mode smartcontinue. Si le programme plante pendant son exécution, lorsqu'on le redémarrera, il reprendra là où il s'est arrêté.
 

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DataConnector
@@ -14,6 +13,15 @@ namespace DataConnector
     {
         static void Main(string[] args)
         {
+            var logFolder = ConfigurationManager.AppSettings.Get("LogFolder");
+
+            if (logFolder == null)
+            {
+                throw new Exception("Invalid LogFolder");
+            }
+
+            var logService = new SimpleLogService(logFolder);
+
             var accessToken = ConfigurationManager.AppSettings.Get("AccessToken");
 
             if(accessToken == null)
@@ -95,6 +103,13 @@ namespace DataConnector
             //Writing settings
             var firstWrite = true;
 
+            var limit = ConfigurationManager.AppSettings.Get("limitNbDataItems");
+            var limitNbDataItems = 50;
+            if (limit != null)
+            {
+                limitNbDataItems = Convert.ToInt32(limit);
+            }
+         
             var listData = new List<InseeData>();
             foreach (InseeCommune commune in listCommunes)
             {
@@ -107,7 +122,8 @@ namespace DataConnector
 
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    throw new Exception($"Error Response StatusCode : {response.StatusCode}");
+                    logService.Error(response.ToString());
+                    return;
                 }
 
                 var xmlContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -115,7 +131,7 @@ namespace DataConnector
                 var data = JsonConvert.DeserializeObject<InseeData>(json);
                 listData.Add(data);
                 
-                if(listData.Count >= 3)
+                if(listData.Count >= limitNbDataItems)
                 {
                     if (firstWrite && !smartContinue)
                     {

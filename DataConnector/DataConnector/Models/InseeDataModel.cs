@@ -127,8 +127,7 @@ namespace DataConnector
     public partial class DonneesZone
     {
         [JsonProperty("@codgeo")]
-        [JsonConverter(typeof(ParseStringConverter))]
-        public long Codgeo { get; set; }
+        public string Codgeo { get; set; }
 
         [JsonProperty("@nivgeo")]
         public Nivgeo Nivgeo { get; set; }

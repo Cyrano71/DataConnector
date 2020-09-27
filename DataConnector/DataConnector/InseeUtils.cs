@@ -26,17 +26,21 @@ namespace DataConnector
             using (var sr = new StreamReader(filePath))
             {
                 // Read the stream as a string, and write the string to the console.
+                var i = 1;
                 while (!sr.EndOfStream)
                 {
                     var line = sr.ReadLine();
                     var data = line.Split(';');
                     var commune = new InseeCommune()
                     {
+                        Index = i,
                         CODGEO = data[0],
                         LIBGEO = data[1],
                     };
 
                     listOfCommunes.Add(commune);
+
+                    i++;
                 }
             }
 
@@ -49,6 +53,33 @@ namespace DataConnector
             String json = File.ReadAllText(jsonFilePath);
             var data = JsonConvert.DeserializeObject<InseeData>(json);
             return data;
+        }
+
+        public static String? GetLastCodgeo(String folder, String fileName)
+        {
+            var filePath = Path.Combine(folder, fileName + ".csv");
+
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+
+            using (var sr = new StreamReader(filePath))
+            {
+                // Read the stream as a string, and write the string to the console.
+                String line = null;
+                while (!sr.EndOfStream)
+                {
+                    line = sr.ReadLine();                 
+                }
+
+                if (line == null)
+                    return null;
+
+                var data = line.Split(';');
+                
+                return data[0];
+            }
         }
 
         public static String GetParametersUrlFormat(InseeParametersRequest inseeParameters)
@@ -64,37 +95,46 @@ namespace DataConnector
             return $"{typedata}" + "_" + inseeParameters.Croisement;
         }
 
-        public static void WriteRawData(List<InseeData> listInseedata, String folder, String fileName)
+        public static void WriteRawData(List<InseeData> listInseedata, String folder, String fileName, Boolean withHeader = true)
         {
+            var fileMode = FileMode.Append;
+            if (withHeader)
+            {
+                fileMode = FileMode.Create;
+            }
+
             var filepath = Path.Combine(folder, fileName + ".csv");
             using (StreamWriter file = new StreamWriter(new FileStream(filepath,
-                                  FileMode.Create, FileAccess.Write), Encoding.GetEncoding("UTF-8")))
+                                  fileMode, FileAccess.Write), Encoding.GetEncoding("UTF-8")))
             {
-                var header = "CODGEO;LIBGEO;";
-                var firstDataNotNull = listInseedata.FirstOrDefault(x => x.Donnees.Cellule != null);
-                if(firstDataNotNull == null)
+                if (withHeader)
                 {
-                    throw new Exception($"No entry in the list of data with non null cellule");
-                }
-
-                foreach (Cellule cellule in firstDataNotNull.Donnees.Cellule)
-                {
-                    var length = cellule.Modalite.Length;
-                    for (int i = 0; i < length; i++)
+                    var header = "CODGEO;LIBGEO;";
+                    var firstDataNotNull = listInseedata.FirstOrDefault(x => x.Donnees.Cellule != null);
+                    if (firstDataNotNull == null)
                     {
-                         var modalite = cellule.Modalite[i];
-                         header += $"{modalite.Variable}{modalite.Code}";
-
-                         if (i != length - 1)
-                         {
-                              header += "_";
-                         }
+                        throw new Exception($"No entry in the list of data with non null cellule");
                     }
 
-                    header += ";";
-                }
+                    foreach (Cellule cellule in firstDataNotNull.Donnees.Cellule)
+                    {
+                        var length = cellule.Modalite.Length;
+                        for (int i = 0; i < length; i++)
+                        {
+                            var modalite = cellule.Modalite[i];
+                            header += $"{modalite.Variable}{modalite.Code}";
 
-                file.WriteLine(header);
+                            if (i != length - 1)
+                            {
+                                header += "_";
+                            }
+                        }
+
+                        header += ";";
+                    }
+
+                    file.WriteLine(header);
+                }        
 
                 foreach (InseeData inseedata in listInseedata)
                 {

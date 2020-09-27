@@ -37,26 +37,63 @@ namespace DataConnector
                 throw new Exception("Invalid DataFolder");
             }
 
-            var inseeParameters = new InseeParametersRequest(ConfigurationManager.AppSettings.Get("JeuDonnees"),
-                 ConfigurationManager.AppSettings.Get("Croisement"), ConfigurationManager.AppSettings.Get("Modalite"), ConfigurationManager.AppSettings.Get("Nivgeo"), "");
+            var jeuDonnees = ConfigurationManager.AppSettings.Get("JeuDonnees");
 
-            var nbCommunes = ConfigurationManager.AppSettings.Get("NbCommunes");
-
-            List<InseeCommune> listCommunes;
-            if (nbCommunes == "*")
+            if (jeuDonnees == null)
             {
-                listCommunes = InseeUtils.GetListOfCommunes(dataFolder);
+                throw new Exception("Invalid jeuDonnees");
+            }
+
+            var croisement = ConfigurationManager.AppSettings.Get("Croisement");
+
+            if (croisement == null)
+            {
+                throw new Exception("Invalid croisement");
+            }
+
+            var modalite = ConfigurationManager.AppSettings.Get("Modalite");
+
+            if (modalite == null)
+            {
+                throw new Exception("Invalid modalite");
+            }
+
+            var nivgeo = ConfigurationManager.AppSettings.Get("Nivgeo");
+
+            if (nivgeo == null)
+            {
+                throw new Exception("Invalid nivgeo");
+            }
+
+            var inseeParameters = new InseeParametersRequest(jeuDonnees, croisement, modalite, nivgeo, "");
+            var rawFileName = InseeUtils.GetFileName(InseeTypeData.RawData, inseeParameters);
+
+            Boolean smartContinue = true;
+            List<InseeCommune> listCommunes = InseeUtils.GetListOfCommunes(dataFolder);
+            var lastCodgeoProcessed = InseeUtils.GetLastCodgeo(dataFolder, rawFileName);
+            if (lastCodgeoProcessed != null)
+            {
+                var lastCommuneProcessed = listCommunes.FirstOrDefault(x => x.CODGEO == lastCodgeoProcessed);
+                if(lastCommuneProcessed == null)
+                {
+                    smartContinue = false;
+                }
+                else
+                {
+                    listCommunes = listCommunes.Where(x => x.Index > lastCommuneProcessed.Index).ToList();
+                }
             }
             else
             {
-                var nb = Convert.ToInt32(nbCommunes);
-                listCommunes = InseeUtils.GetListOfCommunes(dataFolder).Take(nb).ToList();
+                smartContinue = false;
             }
 
             //rate limit 30 requests per minute
             var watch = new Stopwatch();
-
             var nbSecondToWait = 2;
+
+            //Writing settings
+            var firstWrite = true;
 
             var listData = new List<InseeData>();
             foreach (InseeCommune commune in listCommunes)
@@ -78,6 +115,22 @@ namespace DataConnector
                 var data = JsonConvert.DeserializeObject<InseeData>(json);
                 listData.Add(data);
                 
+                if(listData.Count >= 3)
+                {
+                    if (firstWrite && !smartContinue)
+                    {
+                        InseeUtils.WriteRawData(listData, dataFolder, rawFileName);
+                        InseeUtils.WriteVariables(listData[0], dataFolder, InseeUtils.GetFileName(InseeTypeData.Variables, inseeParameters));
+                        firstWrite = false;
+                    }
+                    else
+                    {
+                        InseeUtils.WriteRawData(listData, dataFolder, rawFileName, false);
+                    }
+
+                    listData.Clear();
+                }
+
                 watch.Stop();
                 if (watch.ElapsedMilliseconds < nbSecondToWait * 1000)
                 {
@@ -86,9 +139,7 @@ namespace DataConnector
                 watch.Reset();
             }
 
-            var rawFileName = InseeUtils.GetFileName(InseeTypeData.RawData, inseeParameters);
-            InseeUtils.WriteRawData(listData, dataFolder, rawFileName);
-            InseeUtils.WriteVariables(listData[0], dataFolder, InseeUtils.GetFileName(InseeTypeData.Variables, inseeParameters));
+            InseeUtils.WriteRawData(listData, dataFolder, rawFileName, false);
 
         }
     }

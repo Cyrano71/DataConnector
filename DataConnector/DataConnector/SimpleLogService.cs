@@ -15,6 +15,11 @@ namespace DataConnector
            .CreateLogger();
         }
 
+        public void LogException(Exception e)
+        {
+            _log.Error(e, "DataConnector");
+        }
+
         public void Error(String message)
         {
             _log.Error(message);

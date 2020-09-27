@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace DataConnector
@@ -118,7 +119,16 @@ namespace DataConnector
                 var codgeo = commune.CODGEO;
                 inseeParameters.Codgeo = codgeo;
 
-                var response = client.Get(baseUrl, InseeUtils.GetParametersUrlFormat(inseeParameters));
+                HttpResponseMessage response;
+                try
+                {
+                    response = client.Get(baseUrl, InseeUtils.GetParametersUrlFormat(inseeParameters));
+                }
+                catch(Exception e)
+                {
+                    logService.LogException(e);
+                    return;
+                }
 
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {

@@ -1,6 +1,6 @@
 # DataConnector
 
-Le programme récupére les données de l'Insee en se connectant à leur Api et les écrit
+Le programme récupère les données de l'Insee en se connectant à leur Api et les écrit
 dans deux fichiers csv (un fichier pour les variables et un fichier pour la rawdata).
 
 Pour lancer le programme il faut suivre la procédure suivante :

@@ -12,10 +12,12 @@ Pour lancer le programme il faut suivre la procédure suivante :
 6) Allez sur le site de l'Api de l'Insee pour créer un compte https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=DonneesLocales&version=V0.1&provider=insee
 7) Récupérez votre access token sur votre compte Insee
 8) Il faut ensuite unzip le dossier Release.zip
-9) Dans le dossier Release, dans le App.config vous pouvez remplacer les champs Croisement, JeuDonnees, Modalite, AccessToken avec vos valeurs
-10) Lancez l'executable DataConnector en mode administrateur.
+9) Dans le dossier Release, il y a un fichier de configuration App.config, vous pouvez remplacer les champs Croisement, JeuDonnees, Modalite, AccessToken avec vos valeurs dans ce fichier
+10) Lancez l'exécutable DataConnector en mode administrateur.
 
 Remarque1 : La rate limit pour l'api de l'Insee est de 30 requêtes par minute. Un rateLimiter est implémenté dans le programme. 
 Comme on ne peut demander qu'une seule commune par requête le temps nécessaire pour récupérer les 36 000 communes de la France est aux alentours de 19 heures....
 
-Remarque 2 : Deux exemples de résultats se trouvent dans le dossier InseeData : RawData_ILTR2-CS1_6-SEXE.csv et Variables_ILTR2-CS1_6-SEXE.csv
+Remarque3 : Le programme dispose d'un mode smartcontinue. Si le programme plante pendant son exécution, lorsqu'on le redémarrera, il reprendra là où il s'est arrêté.
+
+Remarque2 : Deux exemples de résultats se trouvent dans le dossier InseeData : RawData_ILTR2-CS1_6-SEXE.csv et Variables_ILTR2-CS1_6-SEXE.csv

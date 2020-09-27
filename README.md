@@ -16,6 +16,7 @@ Pour lancer le programme il faut suivre la procédure suivante :
 8) Il faut ensuite unzip le dossier Release.zip
 9) Dans le dossier Release, il y a un fichier de configuration App.config, vous pouvez remplacer les champs Croisement, JeuDonnees, Modalite, AccessToken avec vos valeurs dans ce fichier
 10) Lancez l'exécutable DataConnector en mode administrateur.
+11) Les fichiers csv se trouveront dans le dossier InseeData
 
 Remarque1 : La rate limit pour l'Api de l'Insee est de 30 requêtes par minute. Un rateLimiter est implémenté dans le programme. 
 Comme on ne peut demander qu'une seule commune par requête, le temps nécessaire pour récupérer les 36 000 communes de la France est d'environ 19 heures....
